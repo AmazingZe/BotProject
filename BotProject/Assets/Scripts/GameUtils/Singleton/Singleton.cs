@@ -30,6 +30,9 @@
         #endregion
 
         public abstract void OnInit();
-        public virtual void OnRelease() { }
+        public virtual void OnRelease()
+        {
+            _Instance = null;
+        }
     }
 }
