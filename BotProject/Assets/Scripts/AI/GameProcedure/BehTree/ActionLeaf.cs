@@ -40,7 +40,7 @@
         {
             var runningStatus = RunningStatus.Finished;
 
-            ActionLeafContext context = GetContext<ActionLeafContext>(data);
+            var context = GetContext<ActionLeafContext>(data);
             if(context.status == ACTION_READY)
             {
                 OnEnter(data);
@@ -65,7 +65,7 @@
         }
         protected sealed override void OnTransition(WorkData data)
         {
-            ActionLeafContext context = GetContext<ActionLeafContext>(data);
+            var context = GetContext<ActionLeafContext>(data);
 
             if (context.needExit)
                 OnExit(data, RunningStatus.Transition);
