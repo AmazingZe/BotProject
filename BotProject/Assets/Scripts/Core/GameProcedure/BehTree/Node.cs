@@ -9,7 +9,7 @@
         private List<Node> m_Childs;
         private int m_MaxChildCount;
 
-        public int Count
+        public int ChildCount
         {
             get { return m_Childs.Count; }
         }
