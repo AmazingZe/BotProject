@@ -4,12 +4,12 @@
 
     using System;
 
-    public class FastPriorityQueue<TItem> : IFixedSizePriorityQueue<TItem, int>
+    public class FastPriorityQueue<TItem> //: IFixedSizePriorityQueue<TItem, int>
     {
         #region Properties
 
         #endregion
 
-        private class SimpleNode : 
+        
     }
 }
