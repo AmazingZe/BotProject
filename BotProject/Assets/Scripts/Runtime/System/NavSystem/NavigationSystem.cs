@@ -1,16 +1,15 @@
-﻿namespace GameRuntime
+﻿namespace GameRuntime.NavSystem
 {
     using UnityEngine;
 
-    using System.Collections;
-
-    public class Pathfinding : MonoBehaviour
+    public class NavigationSystem : MonoBehaviour
     {
         #region Properties
-
+        public int X_Size;
+        public int Z_Size;
         #endregion
 
-        #region Unity Calls
+        #region Unity_Callbacks
         private void Start()
         {
             
@@ -19,13 +18,14 @@
         {
             
         }
+        private void OnDisable()
+        {
+            
+        }
         #endregion
 
         #region API
-        private IEnumerator CycleNoneThread()
-        {
-            yield return null;
-        }
+
         #endregion
     }
 }
