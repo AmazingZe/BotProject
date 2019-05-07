@@ -6,6 +6,5 @@
     {
         void OnDestroy();
         IEnumerable AsyncScan();
-
     }
 }
