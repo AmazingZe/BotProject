@@ -5,6 +5,6 @@
     public interface INavGraph
     {
         void OnDestroy();
-        IEnumerable AsyncScan();
+        //IEnumerable AsyncScan();
     }
 }

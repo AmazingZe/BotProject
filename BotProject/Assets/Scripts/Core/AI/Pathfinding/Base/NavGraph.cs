@@ -14,7 +14,7 @@
 
         #region INavGraph
         public abstract void OnDestroy();
-        public abstract IEnumerable AsyncScan();
+        //public abstract IEnumerable AsyncScan();
         #endregion
     }
 }

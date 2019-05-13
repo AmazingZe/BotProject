@@ -20,11 +20,6 @@
             get { return m_Pos; }
             set { m_Pos = value; }
         }
-
-        public abstract void AddConnection(NavNode node);
-        public abstract void RemoveConnection(NavNode node);
-        public abstract bool ContainsConnection(NavNode node);
-        public abstract void Open();
         #endregion
     }
 }

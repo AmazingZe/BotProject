@@ -2,29 +2,34 @@
 {
     using UnityEngine;
 
-    public class NavigationSystem : MonoBehaviour
+    public class NavigationSystem : SingletonMono<NavigationSystem>, ISystem
     {
         #region Properties
-        public int X_Size;
-        public int Z_Size;
+
+        private int m_Priority;
         #endregion
 
-        #region Unity_Callbacks
-        private void Start()
+        public override void OnInit()
         {
             
         }
-        private void Update()
+
+        #region ISystem
+        int ISystem.Priority
         {
-            
+            get { return m_Priority; }
         }
-        private void OnDisable()
+        void ISystem.OnUpdate()
         {
-            
+
+        }
+        void ISystem.OnRelease()
+        {
+
         }
         #endregion
 
-        #region API
+        #region Public_API
 
         #endregion
     }

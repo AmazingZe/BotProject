@@ -25,10 +25,10 @@
         {
             
         }
-        public override IEnumerable AsyncScan()
-        {
+        //public override IEnumerable AsyncScan()
+        //{
             
-        }
+        //}
         #endregion
     }
 }
