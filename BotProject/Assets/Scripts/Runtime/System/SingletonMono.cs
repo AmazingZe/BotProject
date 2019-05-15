@@ -8,7 +8,7 @@
         private static T m_instance = null;
         private static bool m_instanciated = false;
 
-        public T Instance
+        public static T Instance
         {
             get
             {

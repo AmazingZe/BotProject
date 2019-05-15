@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class NavMap
+    public class NavData : ScriptableObject
     {
 
     }
