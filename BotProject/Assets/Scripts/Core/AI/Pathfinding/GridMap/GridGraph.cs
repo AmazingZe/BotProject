@@ -1,7 +1,9 @@
-﻿namespace GameAI.Pathfinding
+﻿namespace GameAI.Pathfinding.Grid
 {
     using System;
     using System.Collections;
+
+    using UnityEngine;
 
     public class GridGraph : NavGraph
     {
@@ -11,21 +13,34 @@
         public float NodeSize;
 
         private GridNode[] m_Nodes;
+
+        private Rect m_Bound;
+
+        public GridNode this[int index]
+        {
+            get
+            {
+                CheckIndexValid(index);
+                return m_Nodes[index];
+            }
+            set
+            {
+                CheckIndexValid(index);
+                m_Nodes[index] = value;
+            }
+        }
         #endregion
 
-        private GridGraph(int width, int depth)
+        public GridGraph(int width, int depth)
         {
             Width = width;
             Depth = depth;
             m_Nodes = new GridNode[Width * Depth];
+            for (int i = 0; i < m_Nodes.Length; i++)
+                m_Nodes[i] = new GridNode();
         }
 
         #region API
-        public static GridGraph Create(int width, int depth)
-        {
-            return new GridGraph(width, depth);
-        }
-
         public override void GetNodes(Action<NavNode> action)
         {
             for (int i = 0; i < m_Nodes.Length; i++)
@@ -38,10 +53,12 @@
         {
             
         }
-        //public override IEnumerable AsyncScan()
-        //{
-            
-        //}
         #endregion
+
+        private void CheckIndexValid(int index)
+        {
+            if (index >= m_Nodes.Length || index < 0)
+                throw new IndexOutOfRangeException();
+        }
     }
 }

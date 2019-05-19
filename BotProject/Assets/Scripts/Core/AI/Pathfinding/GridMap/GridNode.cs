@@ -1,12 +1,10 @@
-﻿namespace GameAI.Pathfinding
+﻿namespace GameAI.Pathfinding.Grid
 {
     using UnityEngine;
 
     public class GridNode : NavNode
     {
         #region Properties
-        private Vector3 m_pos;
-
         private const int NeighborOffset = 0;
         private const int NeighborBit0 = 1;
         private const int NeighborMask = 0xFF << NeighborOffset;

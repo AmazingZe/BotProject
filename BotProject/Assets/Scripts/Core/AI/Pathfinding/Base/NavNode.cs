@@ -6,7 +6,8 @@
     {
         #region Properties
         private int m_Index;
-        private Vector3 m_Pos;
+        private bool m_Walkable;
+        private Vector2 m_Pos;
         #endregion
 
         #region API
@@ -15,10 +16,15 @@
             get { return m_Index; }
             set { m_Index = value; }
         }
-        public Vector3 Position
+        public Vector2 Position
         {
             get { return m_Pos; }
             set { m_Pos = value; }
+        }
+        public bool Walkable
+        {
+            get { return m_Walkable; }
+            set { m_Walkable = false; }
         }
         #endregion
     }
