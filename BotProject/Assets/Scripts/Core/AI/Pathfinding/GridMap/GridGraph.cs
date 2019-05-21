@@ -10,11 +10,11 @@
         #region Properties
         public int Width;
         public int Depth;
-        public float NodeSize;
+
+        private Vector3Int m_Center;
+        private Rect m_Bound;
 
         private GridNode[] m_Nodes;
-
-        private Rect m_Bound;
 
         public GridNode this[int index]
         {
@@ -28,6 +28,11 @@
                 CheckIndexValid(index);
                 m_Nodes[index] = value;
             }
+        }
+        public Vector3Int Center
+        {
+            get { return m_Center; }
+            set { m_Center = value; }
         }
         #endregion
 
