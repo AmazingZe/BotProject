@@ -4,8 +4,6 @@
 
     using System.Collections.Generic;
 
-    using GameRuntime.NavSystem;
-
     public class GameManager : MonoBehaviour
     {
         #region Properties
@@ -16,7 +14,7 @@
         #region Unity_Callbacks
         private void Start()
         {
-            m_systems.Add(NavigationSystem.Instance);
+            
         }
         private void Update()
         {

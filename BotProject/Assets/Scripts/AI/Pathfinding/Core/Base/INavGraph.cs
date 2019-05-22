@@ -1,4 +1,4 @@
-﻿namespace GameAI.Pathfinding
+﻿namespace GameAI.Pathfinding.Core
 {
     using System.Collections;
 

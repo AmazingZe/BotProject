@@ -1,4 +1,4 @@
-﻿namespace GameAI.Pathfinding
+﻿namespace GameAI.Pathfinding.Core
 {
     using UnityEngine;
 
@@ -26,6 +26,8 @@
             get { return m_Walkable; }
             set { m_Walkable = false; }
         }
+
+        public abstract void Open(Path path, PathNode parentNode);
         #endregion
     }
 }

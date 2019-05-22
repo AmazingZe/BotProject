@@ -4,8 +4,6 @@
 
     using GameUtils;
 
-    using GameAI.Pathfinding.Grid;
-
     public class GridChunk<T> : Singleton<GridChunk<T>> where T : INavGraph
     {
         #region Properties
