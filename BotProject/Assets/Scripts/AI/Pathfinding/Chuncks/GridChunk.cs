@@ -2,6 +2,7 @@
 {
     using UnityEngine;
 
+    using GameAI.Pathfinding.Core;
     using GameUtils;
 
     public class GridChunk<T> : Singleton<GridChunk<T>> where T : INavGraph

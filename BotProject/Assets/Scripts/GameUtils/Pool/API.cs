@@ -1,4 +1,4 @@
-﻿namespace GameUtils.ObjectPool
+﻿namespace GameUtils.Pool
 {
     public interface IPoolable
     {

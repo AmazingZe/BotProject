@@ -1,33 +1,27 @@
 ﻿namespace GameAI.Pathfinding.Core
 {
-    using UnityEngine;
-
     public abstract class NavNode
     {
         #region Properties
+        private const int NodexIndexOffset = 0;
+        private const int NodeIndexMask = 0xFFFF << NodexIndexOffset;
+        private const int GraphIndexOffset = 16;
+        private const int GraphIndexMask = 0xFF << GraphIndexOffset;
+
         private int m_Index;
-        private bool m_Walkable;
-        private Vector2 m_Pos;
         #endregion
 
-        #region API
+        #region Public_Properties
         public int NodeIndex
         {
-            get { return m_Index; }
-            set { m_Index = value; }
+            get { return m_Index & NodeIndexMask; }
+            set { m_Index = (m_Index & ~NodeIndexMask) | (value << NodeIndexMask); }
         }
-        public Vector2 Position
+        public int GraphIndex
         {
-            get { return m_Pos; }
-            set { m_Pos = value; }
+            get { return m_Index & GraphIndexMask; }
+            set { m_Index = (m_Index & ~GraphIndexMask) | (value << GraphIndexMask); }
         }
-        public bool Walkable
-        {
-            get { return m_Walkable; }
-            set { m_Walkable = false; }
-        }
-
-        public abstract void Open(Path path, PathNode parentNode);
         #endregion
     }
 }

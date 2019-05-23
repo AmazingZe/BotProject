@@ -1,5 +1,6 @@
 ﻿namespace GameAI.Pathfinding
 {
+    using GameAI.Pathfinding.Core;
 
     public class Chunck<T> where T : INavGraph
     {

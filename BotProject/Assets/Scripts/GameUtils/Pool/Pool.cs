@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using GameUtils.ObjectPool;
+    using GameUtils.Pool;
 
     public class Pool<T> : Singleton<Pool<T>> where T : class, IPoolable, new()
     {
