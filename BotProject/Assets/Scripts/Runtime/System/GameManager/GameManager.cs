@@ -4,6 +4,8 @@
 
     using System.Collections.Generic;
 
+    using GameAI.Pathfinding.Core;
+
     public class GameManager : MonoBehaviour
     {
         #region Properties
@@ -14,7 +16,15 @@
         #region Unity_Callbacks
         private void Start()
         {
-            
+            var heap = new PathNodeHeap(10);
+            for (int i = 10; i > 0; i--)
+                heap.Enqueue(new PathNode(), i);
+
+            for (int i = 0; i < 10; i++)
+            {
+                var node = heap.Dequeue();
+                Debug.Log(node.Priority + "\n");
+            }
         }
         private void Update()
         {

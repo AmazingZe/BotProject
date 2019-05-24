@@ -1,7 +1,7 @@
 ﻿namespace GameProcedure.BehTree
 {
     using GameUtils;
-    using GameUtils.ObjectPool;
+    using GameUtils.Pool;
 
     public abstract class Condition
     {

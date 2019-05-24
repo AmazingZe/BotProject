@@ -4,23 +4,14 @@
 
     using GameUtils.Pool;
 
-    public class ABPath : Path, IPoolable
+    public class ABPath : Path
     {
         #region Properties
         private Vector3 m_StartPos;
         private Vector3 m_EndPos;
+        
         #endregion
+        
 
-        public ABPath(Vector3 start, Vector3 end) : base()
-        {
-
-        }
-
-        #region IPoolable
-        public void Recycle()
-        {
-
-        }
-        #endregion
     }
 }
