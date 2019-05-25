@@ -8,7 +8,7 @@
     public class NavSystem : MonoBehaviour
     {
         #region Properties
-        private IPathfinder m_Pathfinder;
+        
         #endregion
 
         #region Public_API

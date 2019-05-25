@@ -51,10 +51,12 @@
                 return retMe;
             }
 
-            m_Nodes[1] = m_Nodes[--m_FirstFree];
+            PathNode formerLastNode = m_Nodes[--m_FirstFree];
+            m_Nodes[1] = formerLastNode;
+            formerLastNode.HeapIndex = 1;
             m_Nodes[m_FirstFree] = null;
-            AdjustDown(m_Nodes[1]);
-            retMe.HeapIndex = NotInHeap;
+
+            AdjustDown(formerLastNode);
 
             return retMe;
         }
@@ -105,6 +107,7 @@
         {
             for (int i = 0; i < m_FirstFree; i++)
             {
+                m_Nodes[i].HeapIndex = NotInHeap;
                 m_Nodes[i].Reset();
                 m_Nodes[i] = null;
             }
@@ -117,23 +120,35 @@
             int finalIndex = node.HeapIndex;
             int childleft = finalIndex * 2;
 
-            if (childleft > Count) return;
+            if (childleft > Count)
+                return;
 
             int childRight = childleft + 1;
             PathNode child0Node = m_Nodes[childleft];
+
             if (child0Node.Priority < node.Priority)
             {
                 if (childRight > Count)
                 {
+                    m_Nodes[finalIndex] = child0Node;
+                    m_Nodes[childleft] = node;
+                    child0Node.HeapIndex = finalIndex;
+                    node.HeapIndex = childleft;
+                    return;
+                }
 
+                PathNode child1Node = m_Nodes[childRight];
+                if (child1Node.Priority < child0Node.Priority)
+                {
+                    m_Nodes[finalIndex] = child1Node;
+                    child1Node.HeapIndex = finalIndex;
+                    finalIndex = childRight;
                 }
                 else
                 {
-                    PathNode child1Node = m_Nodes[childRight];
-                    if (child1Node.Priority < child0Node.Priority)
-                    {
-
-                    }
+                    m_Nodes[finalIndex] = child0Node;
+                    child0Node.HeapIndex = finalIndex;
+                    finalIndex = childleft;
                 }
             }
             else
@@ -143,14 +158,78 @@
                     PathNode child1Node = m_Nodes[childRight];
                     if (child1Node.Priority < node.Priority)
                     {
-
+                        m_Nodes[finalIndex] = child1Node;
+                        child1Node.HeapIndex = finalIndex;
+                        finalIndex = childRight;
                     }
+                    else { return; }
+                }
+                else
+                {
+                    return;
                 }
             }
 
-            while ()
+            while (true)
             {
+                childleft = finalIndex * 2;
+                childRight = childleft + 1;
 
+                if (childleft > Count)
+                {
+                    m_Nodes[finalIndex] = node;
+                    node.HeapIndex = finalIndex;
+                    break;
+                }
+                child0Node = m_Nodes[childleft];
+
+                if (child0Node.Priority < node.Priority)
+                {
+                    if(childRight > Count)
+                    {
+                        node.HeapIndex = childleft;
+                        child0Node.HeapIndex = finalIndex;
+                        m_Nodes[childleft] = node;
+                        m_Nodes[finalIndex] = child0Node;
+                        break;
+                    }
+
+                    PathNode child1Node = m_Nodes[childRight];
+                    if (child1Node.Priority < child0Node.Priority)
+                    {
+                        m_Nodes[finalIndex] = child1Node;
+                        child1Node.HeapIndex = finalIndex;
+                        finalIndex = childRight;
+                    }
+                    else
+                    {
+                        m_Nodes[finalIndex] = child0Node;
+                        child0Node.HeapIndex = finalIndex;
+                        finalIndex = childleft;
+                    }
+                }
+                else if (childRight > Count)
+                {
+                    m_Nodes[finalIndex] = node;
+                    node.HeapIndex = finalIndex;
+                    break;
+                }
+                else
+                {
+                    PathNode child1Node = m_Nodes[childRight];
+                    if (child1Node.Priority < node.Priority)
+                    {
+                        m_Nodes[finalIndex] = child1Node;
+                        child1Node.HeapIndex = finalIndex;
+                        finalIndex = childRight;
+                    }
+                    else
+                    {
+                        m_Nodes[finalIndex] = node;
+                        node.HeapIndex = finalIndex;
+                        break;
+                    }
+                }
             }
         }
         private void AdjustUp(PathNode node)
@@ -160,7 +239,8 @@
             {
                 parent = node.HeapIndex >> 1;
                 PathNode parentNode = m_Nodes[parent];
-                if (parentNode.Priority <= node.Priority) return;
+                if (parentNode.Priority < node.Priority)
+                    return;
 
                 m_Nodes[node.HeapIndex] = parentNode;
                 parentNode.HeapIndex = node.HeapIndex;
@@ -175,7 +255,8 @@
             {
                 parent >>= 1;
                 PathNode parentNode = m_Nodes[parent];
-                if (parentNode.Priority <= node.Priority) break;
+                if (parentNode.Priority < node.Priority)
+                    break;
 
                 m_Nodes[node.HeapIndex] = parentNode;
                 parentNode.HeapIndex = node.HeapIndex;

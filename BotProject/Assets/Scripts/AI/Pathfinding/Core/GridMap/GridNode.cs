@@ -2,6 +2,7 @@
 {
     using UnityEngine;
 
+    using System;
     using System.Collections.Generic;
 
     public class GridNode : NavNode
@@ -24,6 +25,24 @@
         {
             get { return (m_Flags & WalkableMask) == 1; }
             set { m_Flags = (m_Flags & ~WalkableMask) | (value ? 1 : 0) << WalkableMask; }
+        }
+        #endregion
+
+        #region Graph_API
+        public override void GetNodes(Action<NavNode> action)
+        {
+            GridGraph graph = GridGraph.GetGridGraph(GraphIndex);
+            graph.GetNodes(action);
+        }
+        public override void GetNeighbor(List<NavNode> list)
+        {
+            GridGraph graph = GridGraph.GetGridGraph(GraphIndex);
+            graph.GetNeighbor(NodeIndex, list);
+        }
+        public override int GetNeighborCost(int dir)
+        {
+            GridGraph graph = GridGraph.GetGridGraph(GraphIndex);
+            return graph.GetNeighborCost(dir);
         }
         #endregion
     }

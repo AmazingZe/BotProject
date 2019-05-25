@@ -6,39 +6,39 @@
     {
         #region Properties
         private const int CostOffset = 28;
-        private const uint CostMask = (1 << CostOffset) - 1;
+        private const int CostMask = (1 << CostOffset) - 1;
 
-        private ushort m_PathID;
-
-        private uint m_Flag;
-        private uint g, h;
+        private int m_Flag;
+        private int g, h;
         #endregion
 
         #region Public_Properties
-        public uint G
+        public int G
         {
             get { return g; }
             set { g = value; }
         }
-        public uint H
+        public int H
         {
             get { return h; }
             set { h = value; }
         }
-        public uint F
+        public int F
         {
             get { return h + g; }
         }
-        public uint Cost
+        public int Cost
         {
             get { return (m_Flag & CostMask); }
             set { m_Flag = ((m_Flag & ~CostMask) | value); }
         }
 
+        public PathHandler Handler;
         public PathNode Parent;
         public NavNode Node;
 
         public int HeapIndex = PathNodeHeap.NotInHeap;
+        public int PathID;
         #endregion
 
         #region IHeapNode
