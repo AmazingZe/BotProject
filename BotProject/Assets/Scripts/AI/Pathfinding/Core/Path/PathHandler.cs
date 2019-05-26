@@ -13,6 +13,10 @@
 
         #region Public_Properties
         public PathNodeHeap Heap;
+        public int PathID
+        {
+            get { return m_PathID; }
+        }
         #endregion
 
         public PathHandler(int thread, int threadCount)

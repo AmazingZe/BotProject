@@ -21,6 +21,10 @@
         {
             get { return m_Nodes[0]; }
         }
+        public bool IsEmpty
+        {
+            get { return m_FirstFree <= 1; }
+        }
         public int Count
         {
             get { return m_FirstFree - 1; }
@@ -32,7 +36,7 @@
 
         public void Enqueue(PathNode node, float priority)
         {
-            if (node.HeapIndex != -1) return;
+            if (node.HeapIndex != -1 || m_FirstFree >= m_Nodes.Length) return;
 
             node.Priority = priority;
             node.HeapIndex = m_FirstFree;
@@ -41,7 +45,7 @@
         }
         public PathNode Dequeue()
         {
-            if (m_FirstFree == 1) return null;
+            if (m_FirstFree <= 1) return null;
             
             PathNode retMe = m_Nodes[1];
 

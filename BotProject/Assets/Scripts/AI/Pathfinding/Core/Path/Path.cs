@@ -7,7 +7,7 @@
     public abstract class Path : IPoolable
     {
         #region Properties
-        private PathHandler m_Handler;
+        protected PathHandler Handler;
         private List<NavNode> m_Path;
         #endregion
 
@@ -20,16 +20,25 @@
         public PathCompleteState CompleteState = PathCompleteState.NotCalculated;
         #endregion
 
+        public void PrepareBase(PathHandler handler)
+        {
+            Handler = handler;
+            Handler.Init(this);
+        }
         public void AdvanceState(PathState pathState)
         {
             PipeLineState = (PathState)System.Math.Max((int)PipeLineState, (int)pathState);
+        }
+        public void Trace(PathNode endNode)
+        {
+
         }
 
         public abstract void Recycle();
 
         public abstract void InitPath();
         public abstract void Prepare();
-        public abstract void Process();
+        public abstract void Process(AlgorithmType type);
         public abstract void CleanUP();
 
         public virtual void ReturnPath()
@@ -54,5 +63,10 @@
         Complete,
         PartialComplete,
         Error
+    }
+    public enum AlgorithmType
+    {
+        AStar,
+        AStarWithJPS,
     }
 }

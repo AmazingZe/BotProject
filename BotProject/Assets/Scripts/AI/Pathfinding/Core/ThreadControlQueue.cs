@@ -26,6 +26,16 @@
         {
             get { return m_Head == null; }
         }
+        public bool AllReceivorBlocked
+        {
+            get
+            {
+                lock (m_Lock)
+                {
+                    return m_Block && m_BlockedNum == m_ReceiveNum;
+                }
+            }
+        }
 
         public void Starve()
         {
@@ -50,6 +60,15 @@
             }
         }
         
+        public void TerminateReceivers()
+        {
+            lock (m_Lock)
+            {
+                m_Terminate = true;
+                m_BolckEvent.Set();
+            }
+        }
+
         public void PushFront(Path path)
         {
             lock (m_Lock)
@@ -110,7 +129,7 @@
                 if (m_Terminate)
                 {
                     m_BlockedNum++;
-                    throw new System.Exception("QueueTerminationException");
+                    throw new ThreadControlQueueException();
                 }
 
                 if (m_Head == null)
@@ -127,7 +146,7 @@
 
                     Monitor.Enter(m_Lock);
                     if (m_Terminate)
-                        throw new System.Exception("QueueTerminationException");
+                        throw new ThreadControlQueueException();
 
                     m_BlockedNum--;
 
@@ -156,7 +175,7 @@
                 if (m_Terminate)
                 {
                     m_BlockedNum++;
-                    throw new System.Exception("QueueTerminationException");
+                    throw new ThreadControlQueueException();
                 }
 
                 if (m_Head == null)
@@ -168,7 +187,7 @@
                     {
                         m_BlockedNum++;
                         if (m_Terminate)
-                            throw new System.Exception("QueueTerminationException");
+                            throw new ThreadControlQueueException();
                         if (m_BlockedNum == m_ReceiveNum)
                         {
 
@@ -196,4 +215,6 @@
         }
         #endregion
     }
+
+    public class ThreadControlQueueException : System.Exception { }
 }
