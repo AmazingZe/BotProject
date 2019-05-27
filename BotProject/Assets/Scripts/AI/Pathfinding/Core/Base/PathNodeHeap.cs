@@ -5,19 +5,19 @@
         #region Properties
         public const int NotInHeap = -1;
 
-        private PathNode[] m_Nodes;
+        private IPathNode[] m_Nodes;
         private int m_FirstFree;
         #endregion
 
         public PathNodeHeap(int capacity)
         {
-            m_Nodes = new PathNode[capacity + 1];
+            m_Nodes = new IPathNode[capacity + 1];
 
             m_FirstFree = 1;
         }
 
         #region Public_API
-        public PathNode First
+        public IPathNode First
         {
             get { return m_Nodes[0]; }
         }
@@ -34,7 +34,7 @@
             get { return m_Nodes.Length; }
         }
 
-        public void Enqueue(PathNode node, float priority)
+        public void Enqueue(IPathNode node, float priority)
         {
             if (node.HeapIndex != -1 || m_FirstFree >= m_Nodes.Length) return;
 
@@ -43,11 +43,11 @@
             m_Nodes[m_FirstFree++] = node;
             AdjustUp(node);
         }
-        public PathNode Dequeue()
+        public IPathNode Dequeue()
         {
             if (m_FirstFree <= 1) return null;
-            
-            PathNode retMe = m_Nodes[1];
+
+            IPathNode retMe = m_Nodes[1];
 
             if(m_FirstFree == 2)
             {
@@ -55,7 +55,7 @@
                 return retMe;
             }
 
-            PathNode formerLastNode = m_Nodes[--m_FirstFree];
+            IPathNode formerLastNode = m_Nodes[--m_FirstFree];
             m_Nodes[1] = formerLastNode;
             formerLastNode.HeapIndex = 1;
             m_Nodes[m_FirstFree] = null;
@@ -65,7 +65,7 @@
             return retMe;
         }
 
-        public void Update(PathNode node, float priority)
+        public void Update(IPathNode node, float priority)
         {
             if (node.HeapIndex == NotInHeap) return;
 
@@ -77,7 +77,7 @@
             if (!flag) AdjustDown(node);
             else AdjustUp(node);
         }
-        public void Remove(PathNode node)
+        public void Remove(IPathNode node)
         {
             if (node.HeapIndex == NotInHeap) return;
 
@@ -89,7 +89,7 @@
                 return;
             }
 
-            PathNode lastNode = m_Nodes[--m_FirstFree];
+            IPathNode lastNode = m_Nodes[--m_FirstFree];
             m_Nodes[m_FirstFree] = null;
             m_Nodes[node.HeapIndex] = lastNode;
             lastNode.HeapIndex = node.HeapIndex;
@@ -100,7 +100,7 @@
 
         public void Resize(int newSize)
         {
-            var newArray = new PathNode[newSize + 1];
+            var newArray = new IPathNode[newSize + 1];
             int highestSize = System.Math.Min(newSize, m_Nodes.Length);
 
             System.Array.Copy(m_Nodes, newArray, highestSize);
@@ -119,7 +119,7 @@
         }
         #endregion
 
-        private void AdjustDown(PathNode node)
+        private void AdjustDown(IPathNode node)
         {
             int finalIndex = node.HeapIndex;
             int childleft = finalIndex * 2;
@@ -128,7 +128,7 @@
                 return;
 
             int childRight = childleft + 1;
-            PathNode child0Node = m_Nodes[childleft];
+            IPathNode child0Node = m_Nodes[childleft];
 
             if (child0Node.Priority < node.Priority)
             {
@@ -141,7 +141,7 @@
                     return;
                 }
 
-                PathNode child1Node = m_Nodes[childRight];
+                IPathNode child1Node = m_Nodes[childRight];
                 if (child1Node.Priority < child0Node.Priority)
                 {
                     m_Nodes[finalIndex] = child1Node;
@@ -159,7 +159,7 @@
             {
                 if(childRight <= Count)
                 {
-                    PathNode child1Node = m_Nodes[childRight];
+                    IPathNode child1Node = m_Nodes[childRight];
                     if (child1Node.Priority < node.Priority)
                     {
                         m_Nodes[finalIndex] = child1Node;
@@ -198,7 +198,7 @@
                         break;
                     }
 
-                    PathNode child1Node = m_Nodes[childRight];
+                    IPathNode child1Node = m_Nodes[childRight];
                     if (child1Node.Priority < child0Node.Priority)
                     {
                         m_Nodes[finalIndex] = child1Node;
@@ -220,7 +220,7 @@
                 }
                 else
                 {
-                    PathNode child1Node = m_Nodes[childRight];
+                    IPathNode child1Node = m_Nodes[childRight];
                     if (child1Node.Priority < node.Priority)
                     {
                         m_Nodes[finalIndex] = child1Node;
@@ -236,13 +236,13 @@
                 }
             }
         }
-        private void AdjustUp(PathNode node)
+        private void AdjustUp(IPathNode node)
         {
             int parent;
             if (node.HeapIndex > 1)
             {
                 parent = node.HeapIndex >> 1;
-                PathNode parentNode = m_Nodes[parent];
+                IPathNode parentNode = m_Nodes[parent];
                 if (parentNode.Priority < node.Priority)
                     return;
 
@@ -258,7 +258,7 @@
             while (parent > 1)
             {
                 parent >>= 1;
-                PathNode parentNode = m_Nodes[parent];
+                IPathNode parentNode = m_Nodes[parent];
                 if (parentNode.Priority < node.Priority)
                     break;
 

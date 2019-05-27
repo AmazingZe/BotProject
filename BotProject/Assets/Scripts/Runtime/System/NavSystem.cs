@@ -7,25 +7,33 @@
     public class NavSystem : MonoBehaviour
     {
         #region Properties
-        private PathProcessor m_PathProcessor;
+        private IPathProcessor m_PathProcessor;
         private PathReturnQueue m_ReturnQueue;
         #endregion
 
         #region Public_API
         public int ThreadCount;
-
-        public float MaxFrameTime
-        {
-            get { return m_PathProcessor.MaxFrameTime; }
-            set { m_PathProcessor.MaxFrameTime = value; }
-        }
+        public AlgorithmType SearchType;
+        public float MaxFrameTime;
         #endregion
 
         #region Unity_Callbacks
         private void Start()
         {
             m_ReturnQueue = new PathReturnQueue();
-            m_PathProcessor = new PathProcessor(ThreadCount, m_ReturnQueue);
+
+            IPathProcessor processor;
+            if (SearchType == AlgorithmType.AStar)
+                processor = new PathProcessor<PathNode>(ThreadCount, m_ReturnQueue);
+            else if (SearchType == AlgorithmType.AStarWithJPS)
+                processor = new PathProcessor<JPSPathNode>(ThreadCount, m_ReturnQueue);
+            else
+                throw new System.Exception("Undifined SearchType!");
+            processor.SetSearchType(SearchType);
+            processor.SetMaxFrameTime(MaxFrameTime);
+            m_PathProcessor = processor;
+
+            //Todo: Bake_Graph
         }
         private void Update()
         {

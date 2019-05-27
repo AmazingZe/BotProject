@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using UnityEngine;
+
     public abstract class NavNode
     {
         #region Properties
@@ -25,6 +27,7 @@
             get { return m_Index & GraphIndexMask; }
             set { m_Index = (m_Index & ~GraphIndexMask) | (value << GraphIndexMask); }
         }
+        public abstract Vector3 Position { get; set; }
         #endregion
 
         #region Graph_API

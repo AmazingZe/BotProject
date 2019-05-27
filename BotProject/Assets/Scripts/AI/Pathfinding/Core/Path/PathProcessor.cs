@@ -7,17 +7,17 @@
 
     using UnityEngine;
 
-    public class PathProcessor
+    public class PathProcessor<T> : IPathProcessor
+                                    where T : PathNode, new()
     {
         #region Properties
         private readonly PathReturnQueue m_ReturnQueue;
         private readonly ThreadControlQueue m_ControlQueue;
         private readonly Thread[] m_Threads;
-        private readonly PathHandler[] m_Handlers;
+        private readonly PathHandler<T>[] m_Handlers;
         private readonly Stack<int> m_IndexPool;
 
         private IEnumerator threadCourtine;
-        private IPathfinder m_Pathfinder;
         private float m_MaxFrameTime;
         #endregion
 
@@ -32,18 +32,12 @@
                     return 1;
             }
         }
-        public float MaxFrameTime
-        {
-            get { return m_MaxFrameTime; }
-            set { m_MaxFrameTime = value; }
-        }
 
         public event Action<Path> OnPrePathSearch;
         public event Action<Path> OnPostPathSearch;
         public event Action OnQueueUnblock;
 
         public bool IsMultiThread = false;
-        public AlgorithmType SearchType = AlgorithmType.AStar;
         #endregion
 
         public PathProcessor(int threadNum, PathReturnQueue returnQueue)
@@ -54,18 +48,18 @@
             if (threadNum > 0)
             {
                 m_Threads = new Thread[threadNum];
-                m_Handlers = new PathHandler[threadNum];
+                m_Handlers = new PathHandler<T>[threadNum];
                 for (int i = 0; i < threadNum; i++)
                 {
-
+                    
                 }
                 IsMultiThread = true;
             }
             else
             {
                 m_Threads = new Thread[0];
-                m_Handlers = new PathHandler[1];
-                m_Handlers[0] = new PathHandler(0, 0);
+                m_Handlers = new PathHandler<T>[1];
+                m_Handlers[0] = new PathHandler<T>(0, 0);
                 threadCourtine = CalculatePath(m_Handlers[0]);
                 IsMultiThread = false;
             }
@@ -73,12 +67,17 @@
             m_ReturnQueue = returnQueue;
             m_ControlQueue = new ThreadControlQueue(threadNum);
             m_IndexPool = new Stack<int>();
-            m_Pathfinder = AStarPathFinder<GridNode>.Instance;
 
             m_MaxFrameTime = 0;
         }
 
-        #region Public_API
+        #region IPathProcessor_API
+        public void SetSearchType(AlgorithmType type)
+        {
+            for (int i = 0; i < m_Handlers.Length; i++)
+                m_Handlers[i].SearchType = type;
+        }
+        public void SetMaxFrameTime(float time) { m_MaxFrameTime = time; }
         public void InitNode(NavNode node)
         {
             if (!m_ControlQueue.AllReceivorBlocked)
@@ -123,9 +122,20 @@
                 }
             }
         }
+        
+        public void BakeGraph2Handler(NavGraph graph)
+        {
+            if(graph is GridGraph)
+            {
+                var gridGraph = graph as GridGraph;
+                for (int i = 0; i < m_Handlers.Length; i++)
+                    gridGraph.BakeGraph2Handler(m_Handlers[i]);
+            }
+
+        }
         #endregion
 
-        private IEnumerator CalculatePath(PathHandler handler)
+        private IEnumerator CalculatePath(PathHandler<T> handler)
         {
             long maxTicks = (long)(m_MaxFrameTime * 10000);
             long targetTick = DateTime.UtcNow.Ticks + maxTicks;
@@ -169,7 +179,7 @@
 
                     while (path.CompleteState == PathCompleteState.NotCalculated)
                     {
-                        path.Process(SearchType);
+                        path.Process(targetTick);
 
                         if (path.CompleteState != PathCompleteState.NotCalculated)
                             break;
@@ -177,7 +187,7 @@
                     totalTicks += DateTime.UtcNow.Ticks - startTicks;
                 }
 
-                path.CleanUP();
+                path.CleanUp();
 
                 var onComplete = path.OnComplete;
                 if (onComplete != null) onComplete(path);

@@ -154,6 +154,13 @@
                 else list.Add(node);
             }
         }
+        public override void BakeGraph2Handler(IPathHandler handler)
+        {
+            if (handler.SearchType == AlgorithmType.AStar)
+                PathNode.Bake(handler, this);
+            else if (handler.SearchType == AlgorithmType.AStarWithJPS)
+                JPSPathNode.Bake(handler, this);
+        }
         #endregion
 
         private void CheckIndexValid(int index)

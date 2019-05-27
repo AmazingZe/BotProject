@@ -16,7 +16,7 @@
         #endregion
 
         #region Public_Properties
-        public Vector2 Position
+        public override Vector3 Position
         {
             get { return m_Pos; }
             set { m_Pos = value; }
