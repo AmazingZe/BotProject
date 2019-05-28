@@ -2,10 +2,10 @@
 {
     using GameAI.Pathfinding.Core;
 
-    public class Chunck<T> where T : INavGraph
+    public class Seeker
     {
         #region Properties
-        private T m_Graph;
+
         #endregion
 
         #region Public_API

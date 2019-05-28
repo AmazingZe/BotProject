@@ -4,18 +4,21 @@
 
     using System.Collections.Generic;
 
-    using GameAI.Pathfinding.Core;
+    using GameAI.Component;
 
     public class GameManager : MonoBehaviour
     {
         #region Properties
         private List<ISystem> m_systems = new List<ISystem>();
-        public Transform target;
+        private MsgCenter center;
         #endregion
 
         #region Unity_Callbacks
         private void Start()
         {
+            center = new MsgCenter();
+            center.OnInit();
+
             
         }
         private void Update()
