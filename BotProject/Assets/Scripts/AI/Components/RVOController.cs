@@ -33,7 +33,5 @@
             Owner = owner;
         }
         #endregion
-
-
     }
 }

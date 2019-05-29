@@ -10,6 +10,9 @@
     public class MoveContoller : IComponent
     {
         #region Move_Properties
+        private static MoveConfigure Configure = null;
+        private static string ConfigurePath = "ScriptableObjects/MoveConfigure";
+
         public bool UpdatePosition = true;
         public bool UpdateRotation = true;
         public bool CanMove = true;
@@ -48,13 +51,20 @@
         {
             get { return UpdateRotation ? transform.rotation : m_SimulatedRotation; }
         }
+        
+        public void SetPath(List<Vector3> path)
+        {
+            interpolator.SetPath(path);
+        }
         #endregion
 
         private MoveContoller() { }
-        public static MoveContoller Create()
+        public static MoveContoller Create(BotBehaviour owner)
         {
             MoveContoller retMe = new MoveContoller();
             retMe.OnInit();
+            retMe.Owner = owner;
+            retMe.transform = owner.transform;
             return retMe;
         }
 
@@ -66,10 +76,22 @@
         public void OnInit()
         {
             interpolator = new PathInterpolator();
-            List<Vector3> path = new List<Vector3>() { new Vector3(2, 0, 0),
-                                                       new Vector3(3, 0, 1),
-                                                       new Vector3(3, 0, 3) };
-            interpolator.SetPath(path);
+
+            if(Configure == null)
+            {
+                Configure = Resources.Load<MoveConfigure>(ConfigurePath);
+                UpdatePosition = Configure.UpdatePosition;
+                UpdateRotation = Configure.UpdateRotation;
+                CanMove = Configure.CanMove;
+                IsStopped = Configure.IsStopped;
+                RotationSpeed = Configure.RotationSpeed;
+                MaxAcceleration = Configure.MaxAcceleration;
+                MaxSpeed = Configure.MaxSpeed;
+                LookAheadDis = Configure.LookAheadDis;
+                EndReachedDis = Configure.EndReachedDis;
+                SlowDownDis = Configure.SlowDownDis;
+                SlowWhenNotFacingTarget = Configure.SlowWhenNotFacingTarget;
+    }
         }
         public void OnRelease()
         {
@@ -84,22 +106,20 @@
             MovementUpdate(Time.deltaTime, out nextPosition, out nextRotation);
             FinalizeMovement(nextPosition, nextRotation);
         }
-        public void SetOwner(BotBehaviour owner)
-        {
-            Owner = owner;
-            transform = owner.transform;
-        }
         public void OnNotify(int msgID)
         {
 
         }
         #endregion
 
+        #region Movement
         private void MovementUpdate(float deltaTime, out Vector3 nextPosition, out Quaternion nextRotation)
         {
             m_LastDeltatime = deltaTime;
 
             float currentAcceleration = MaxAcceleration;
+
+            if (currentAcceleration < 0) currentAcceleration *= -MaxSpeed;
 
             if (UpdatePosition) m_SimulatedPosition = transform.position;
             if (UpdateRotation) m_SimulatedRotation = transform.rotation;
@@ -194,6 +214,7 @@
             if (UpdateRotation)
                 transform.rotation = nextRotation;
         }
+        #endregion
 
         private void OnTargetReached()
         {

@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using UnityEngine;
+
     public class GridGraph : NavGraph
     {
         #region Static
@@ -49,6 +51,8 @@
             1,1,1,1,
             1,1,1,1
         };
+
+        public Vector3 Center = Vector3.zero;
         #endregion
 
         #region Public_Properties
@@ -161,7 +165,17 @@
             else if (handler.SearchType == AlgorithmType.AStarWithJPS)
                 JPSPathNode.Bake(handler, this);
         }
+        public override void UpdateTransform()
+        {
+            
+        }
         #endregion
+
+        public void BakeGraph(bool[] data)
+        {
+            for (int i = 0; i < data.Length; i++)
+                m_GridNodes[i].Walkable = data[i];
+        }
 
         private void CheckIndexValid(int index)
         {

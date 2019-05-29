@@ -40,6 +40,17 @@
             return Vector3.Dot(point - lineStart, dir) / mag;
         }
 
+        public static Vector3 CloestPointOnSegement(Vector3 lineStart, Vector3 lineEnd, Vector3 point)
+        {
+            var dir = lineEnd - lineStart;
+            float sqrMagn = dir.sqrMagnitude;
+
+            if (sqrMagn <= 0.000001) return lineStart;
+
+            float factor = Vector3.Dot(point - lineStart, dir) / sqrMagn;
+            return lineStart + Mathf.Clamp01(factor) * dir;
+        }
+
         public static float LineCircleIntersectionFactor(Vector3 circleCenter,
                                                          Vector3 linePoint1,
                                                          Vector3 linePoint2,
@@ -68,6 +79,15 @@
             else
                 return Vector3.zero;
         }
+        public static Vector2 Normalize2D(Vector2 v, out float magnitude)
+        {
+            magnitude = v.magnitude;
+
+            if (magnitude > 1E-05f) 
+                return v / magnitude; 
+            else 
+                return Vector2.zero; 
+        }
 
         public static Vector3 ComplexMultiplyConjugate(Vector3 a, Vector3 b)
         {
@@ -76,6 +96,11 @@
         public static Vector3 ComplexMultiply(Vector3 a, Vector3 b)
         {
             return new Vector3(a.x * b.x - a.z * b.z, 0, a.x * b.z + a.z * b.x);
+        }
+
+        public static Vector2 ComplexMultiply2D(Vector2 a, Vector2 b)
+        {
+            return new Vector2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);
         }
     }
 }

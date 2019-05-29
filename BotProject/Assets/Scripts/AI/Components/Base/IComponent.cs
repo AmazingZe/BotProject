@@ -11,8 +11,6 @@
         void OnUpdate();
         void OnRelease();
 
-        void SetOwner(BotBehaviour owner);
-
         void OnNotify(int msgID);
     }
 }
