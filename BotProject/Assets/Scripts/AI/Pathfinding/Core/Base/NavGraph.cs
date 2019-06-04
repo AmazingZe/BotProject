@@ -13,7 +13,12 @@
         public abstract void OnDestroy();
         public abstract void GetNeighbor(int nodeIndex, List<NavNode> list);
         public abstract void BakeGraph2Handler(IPathHandler handler);
-        public abstract void UpdateTransform();
+        public abstract GraphTransform UpdateTransform();
         #endregion
+
+        public virtual void OnDrawGizmos()
+        {
+
+        }
     }
 }

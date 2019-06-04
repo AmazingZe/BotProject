@@ -7,10 +7,13 @@
 
     using UnityEngine;
 
+    using GameRuntime;
+
     public class PathProcessor<T> : IPathProcessor
                                     where T : PathNode, new()
     {
         #region Properties
+        private readonly NavSystem active;
         private readonly PathReturnQueue m_ReturnQueue;
         private readonly ThreadControlQueue m_ControlQueue;
         private readonly Thread[] m_Threads;
@@ -40,10 +43,12 @@
         public bool IsMultiThread = false;
         #endregion
 
-        public PathProcessor(int threadNum, PathReturnQueue returnQueue)
+        public PathProcessor(int threadNum, PathReturnQueue returnQueue, NavSystem system)
         {
             if (threadNum < 0)
                 throw new ArgumentOutOfRangeException("processors illegal");
+
+            active = system;
 
             if (threadNum > 0)
             {
@@ -175,6 +180,9 @@
 
                 if (path.CompleteState == PathCompleteState.NotCalculated)
                 {
+                    active.debugHandler = path.Handler;
+                    active.debugPathID = path.PathID;
+
                     path.InitPath();
 
                     while (path.CompleteState == PathCompleteState.NotCalculated)

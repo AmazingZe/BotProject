@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3357cc2dae9f3bc47897efed16f0de68, type: 3}
   m_Name: NavSystemConfigure
   m_EditorClassIdentifier: 
+  gridGraph:
+    MaxSlope: 0
+    Center: {x: 2.5, y: 0, z: 2.5}
+    Rotation: {x: 0, y: 0, z: 0}
   Width: 5
   Depth: 5
   NodeSize: 1
+  Center: {x: 2.5, y: 0, z: 2.5}
+  MaxSlope: 0

@@ -11,7 +11,7 @@
         #region Properties
         private const int HeuristicScale = 1;
 
-        protected IPathHandler Handler;
+        public IPathHandler Handler;
         private List<NavNode> m_Path;
 
         private Vector3 m_HTarget;

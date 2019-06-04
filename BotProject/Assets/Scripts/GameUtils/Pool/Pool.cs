@@ -35,6 +35,7 @@
             m_FirstFree = 0;
             m_AllocatedNum = 0;
 
+            m_Pool = new T[5];
             m_Checks = new HashSet<T>();
         }
         public override void OnRelease()
@@ -61,14 +62,14 @@
                 m_Pool = newArray;
             }
 
-            m_Pool[++m_FirstFree] = item;
+            m_Pool[m_FirstFree++] = item;
         }
         private T _Allocate()
         {
-            if (m_FirstFree < 0) return new T();
+            if (m_FirstFree <= 0) return new T();
             else
             {
-                var retMe = m_Pool[m_FirstFree--];
+                var retMe = m_Pool[--m_FirstFree];
                 m_Checks.Remove(retMe);
                 return retMe;
             }
