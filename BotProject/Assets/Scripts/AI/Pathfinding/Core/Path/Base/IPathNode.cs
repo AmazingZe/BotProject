@@ -1,6 +1,6 @@
 ﻿namespace GameAI.Pathfinding.Core
 {
-    using GameUtils.Heap;
+    using GameUtils;
 
     public interface IPathNode : IHeapNode
     {

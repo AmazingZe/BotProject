@@ -1,4 +1,4 @@
-﻿namespace GameUtils.Heap
+﻿namespace GameUtils
 {
     public interface IHeapNode
     {
